@@ -932,8 +932,8 @@ function drawComparisonChart(parentId,detailId,names,series,bars) {
   detail.textContent = '';
   if (!names.length) return empty(parent,'ไม่มีข้อมูลปี 2025–2026 สำหรับตัวกรองที่เลือก');
   const colors = ['#1d5ad5','#087d69'];
-  const left = 62, right = 20, top = 18, bottom = 216;
-  const width = Math.max(480,parent.clientWidth,left+right+names.length*(bars ? 108 : 58));
+  const left = 62, right = 20, top = 30, bottom = 228;
+  const width = Math.max(480,parent.clientWidth,left+right+names.length*(bars ? 112 : 72));
   const slot = (width-left-right)/names.length;
   const x = i=>left+(i+.5)*slot;
   const peak = Math.max(1,...series.flat());
@@ -947,9 +947,9 @@ function drawComparisonChart(parentId,detailId,names,series,bars) {
   const canvas = el('canvas');
   const scale = Math.min(2,window.devicePixelRatio || 1);
   canvas.width = Math.round(width*scale);
-  canvas.height = Math.round((bottom+12)*scale);
+  canvas.height = Math.round((bottom+26)*scale);
   canvas.style.width = width+'px';
-  canvas.style.height = (bottom+12)+'px';
+  canvas.style.height = (bottom+26)+'px';
   canvas.setAttribute('aria-hidden','true');
   const ctx = canvas.getContext('2d');
   ctx.scale(scale,scale);
@@ -965,11 +965,12 @@ function drawComparisonChart(parentId,detailId,names,series,bars) {
     ctx.fillStyle = '#53637a';
     ctx.fillText(fmt(tick),left-9,y(tick));
   }
+  const barWidth = Math.min(30,slot*0.32);
+  const barCenter = (i,index)=>x(i)+(index ? 24 : -24);
   for (const [index,values] of series.entries()) {
     ctx.fillStyle = ctx.strokeStyle = colors[index];
     if (bars) {
-      const barWidth = Math.min(30,slot*0.32);
-      values.forEach((value,i)=>ctx.fillRect(x(i)+(index-1)*barWidth+(index ? 2 : -2),y(value),barWidth,bottom-y(value)));
+      values.forEach((value,i)=>ctx.fillRect(barCenter(i,index)-barWidth/2,y(value),barWidth,bottom-y(value)));
       continue;
     }
     ctx.beginPath();
@@ -992,6 +993,23 @@ function drawComparisonChart(parentId,detailId,names,series,bars) {
       ctx.beginPath();
       ctx.arc(x(i),y(value),4,0,Math.PI*2);
       ctx.fill();
+    });
+  }
+  ctx.textAlign = 'center';
+  ctx.font = 'bold 12px system-ui';
+  ctx.lineWidth = 3;
+  ctx.lineJoin = 'round';
+  ctx.strokeStyle = '#fff';
+  for (const [index,values] of series.entries()) {
+    ctx.fillStyle = colors[index];
+    values.forEach((value,i)=>{
+      if (value===null) return;
+      const other = series[1-index][i];
+      const below = !bars && other!==null && (value<other || (value===other && index===1));
+      const labelX = bars ? barCenter(i,index) : x(i);
+      const labelY = y(value)+(below ? 13 : -12);
+      ctx.strokeText(fmt(value),labelX,labelY);
+      ctx.fillText(fmt(value),labelX,labelY);
     });
   }
   const labels = el('div','line-labels');
