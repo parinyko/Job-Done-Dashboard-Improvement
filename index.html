@@ -839,9 +839,10 @@ function drawWfmCharts(data, solutionMatch, assignToMatch) {
     parent.append(bars);
   }
 }
-function drawPie(data) {
+function drawPie(data,selectedCount) {
   const legend = byId('legend'), ctx = byId('pie').getContext('2d');
   legend.replaceChildren();
+  byId('pie').removeAttribute('title');
   ctx.clearRect(0,0,440,440);
   const ranked = group(data,3), colors = new Map([...new Set(rows.map(row=>row[3]))].sort().map((key,i)=>[key,palette[i%palette.length]]));
   let start = 0;
@@ -850,7 +851,9 @@ function drawPie(data) {
   for (const [name,count] of ranked) {
     const end = start + Math.PI*2*count/data.length;
     const color = colors.get(name), active = state.system.has(name);
-    slices.push({start,end,name});
+    const share = count/data.length;
+    const percent = (100*share).toFixed(1)+'%';
+    slices.push({start,end,name,percent});
     ctx.beginPath();
     ctx.arc(220,220,200,start-Math.PI/2,end-Math.PI/2);
     ctx.arc(220,220,121,end-Math.PI/2,start-Math.PI/2,true);
@@ -864,28 +867,38 @@ function drawPie(data) {
     button.setAttribute('aria-pressed',active);
     const swatch = el('i','swatch');
     swatch.style.background = color;
-    button.append(swatch,el('span','label',name),el('span','count',fmt(count)),el('span','count muted',(100*count/data.length).toFixed(1)+'%'));
+    button.append(swatch,el('span','label',name),el('span','count',fmt(count)),el('span','count muted',percent));
     button.onclick = ()=>toggle('system',name);
     legend.append(button);
   }
+  const selectedPercent = data.length ? (100*selectedCount/data.length).toFixed(1)+'%' : '—';
   ctx.textAlign = 'center';
   ctx.fillStyle = '#17243a';
   ctx.font = 'bold 44px system-ui';
-  ctx.fillText(fmt(data.length),220,225);
+  ctx.fillText(selectedPercent,220,217);
   ctx.fillStyle = '#53637a';
   ctx.font = '25px system-ui';
-  ctx.fillText('งานในกราฟ',220,262);
+  ctx.fillText(fmt(selectedCount)+' / '+fmt(data.length)+' งาน',220,255);
 }
-byId('pie').onclick = event=>{
+function pieSliceAt(event) {
   const rect = event.currentTarget.getBoundingClientRect();
   const x = (event.clientX-rect.left)/rect.width*440-220;
   const y = (event.clientY-rect.top)/rect.height*440-220;
   const radius = Math.hypot(x,y);
   if (radius < 121 || radius > 200) return;
   const angle = (Math.atan2(y,x)+Math.PI*2.5)%(Math.PI*2);
-  const slice = slices.find(item=>angle>=item.start && angle<item.end);
+  return slices.find(item=>angle>=item.start && angle<item.end);
+}
+byId('pie').onclick = event=>{
+  const slice = pieSliceAt(event);
   if (slice) toggle('system',slice.name);
 };
+byId('pie').onpointermove = event=>{
+  const slice = pieSliceAt(event);
+  const title = slice ? slice.name+' · '+slice.percent : '';
+  if (event.currentTarget.title!==title) event.currentTarget.title = title;
+};
+byId('pie').onpointerleave = event=>event.currentTarget.removeAttribute('title');
 function drawYearBars(data) {
   const column = state.mainGroup.size ? 2 : 13;
   const names = group(data,column).map(([name])=>name);
@@ -1048,7 +1061,7 @@ function render() {
     }
   }
   drawBars(base.filter(row=>systemMatch(row) && wfmMatch(row)));
-  drawPie(base.filter(row=>causeMatch(row) && wfmMatch(row)));
+  drawPie(base.filter(row=>causeMatch(row) && wfmMatch(row)),selected.length);
   drawWfmCharts(base.filter(row=>causeMatch(row) && systemMatch(row)),solutionMatch,assignToMatch);
   const comparison = monthRows.filter(row=>(row[0]===2025 || row[0]===2026) && causeMatch(row) && systemMatch(row) && wfmMatch(row));
   drawYearBars(comparison);
