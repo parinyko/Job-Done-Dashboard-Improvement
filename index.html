@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>OSP BKK · Job Done Dashboard</title>
+<title>OSP Subcauses for Improvement</title>
 <style>
 :root{color-scheme:light;--ink:#17243a;--muted:#53637a;--line:#dde5ef;--blue:#1d5ad5;--mint:#087d69;--bg:#f2f6fb}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 system-ui,"Segoe UI",Tahoma,sans-serif}header{background:#10233f;color:#fff;padding:34px 0 38px}.wrap{width:min(1420px,calc(100% - 40px));margin:auto}.hero,.toolbar,.heading,.key{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}h1,h2,p{margin:0}h1{font-size:clamp(26px,4vw,39px);letter-spacing:-.045em;line-height:1.18}.brand{color:#8ddcd3;font-weight:750;letter-spacing:.14em;margin-bottom:6px}.hero p{color:#c6d5e9;margin-top:10px}button,select,.upload{font:inherit;border:1px solid var(--line);border-radius:9px;background:#fff;color:var(--ink);padding:8px 12px;cursor:pointer}button:hover,select:hover{border-color:#6793e7}button:focus-visible,select:focus-visible,.upload:focus-within{outline:3px solid #659bf4;outline-offset:2px}.upload{background:#d7fff4;color:#0b443c;border:0;font-weight:750;padding:11px 16px}.upload input{position:absolute;width:1px;height:1px;opacity:0}.upload:has(input:disabled){opacity:.65;cursor:wait}main{padding:22px 0 36px}.toolbar{margin-bottom:14px;justify-content:flex-start}.toolbar label{font-weight:700}.toolbar select{margin-left:6px}.filter{background:#e4edff;border-color:#b0c8fa;color:#163f8f}.reset{margin-left:auto}.status{color:var(--muted);margin-bottom:15px;overflow-wrap:anywhere}.status.error{color:#a32020}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:16px}.card,.panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px}.card span,.muted,.hint{color:var(--muted)}.card strong{display:block;font-size:29px;font-variant-numeric:tabular-nums}.card small{color:var(--muted)}.card:nth-child(2) strong{color:var(--blue)}.card:nth-child(3) strong{color:var(--mint)}.split{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:16px;margin-bottom:16px}h2{font-size:19px}.hint{margin:3px 0 14px}.barrow,.legend-row{display:grid;gap:8px;align-items:center;text-align:left;width:100%;padding:5px 7px;border:1px solid transparent;border-radius:7px}.barrow{grid-template-columns:minmax(0,1.55fr) minmax(28px,1fr) 58px}.barrow:hover,.legend-row:hover,.active{background:#ebf2ff}.label{overflow-wrap:anywhere}.track{height:10px;border-radius:20px;background:#ebf0f8;overflow:hidden}.fill{display:block;height:100%;background:#3b72dd;border-radius:20px}.count{text-align:right;font-weight:700;font-variant-numeric:tabular-nums}.pie-area{display:grid;justify-items:center}.pie-area canvas{width:220px;height:220px;cursor:pointer}.legend{width:100%;margin-top:8px}.legend-row{grid-template-columns:12px minmax(0,1fr) auto 54px}.swatch{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:4px}.key{justify-content:flex-start;margin:0 0 10px;color:var(--muted)}.matrix-wrap{overflow:auto;max-height:630px;border:1px solid var(--line);border-radius:9px}.matrix{border-collapse:separate;border-spacing:0;text-align:center;width:100%;table-layout:fixed}.matrix th,.matrix td{border-bottom:1px solid #edf1f7;border-right:1px solid #edf1f7;height:32px}.matrix thead th{position:sticky;top:0;z-index:1;background:#edf3fb;padding:5px;font-size:11px;line-height:1.28;overflow-wrap:anywhere}.matrix tr>*:first-child{position:sticky;left:0;background:#edf3fb;z-index:1;width:61px}.matrix thead tr>*:first-child{z-index:2}.matrix td{white-space:nowrap}.point{display:inline-block;vertical-align:middle;padding:0;border:0;min-width:6px;min-height:6px;border-radius:50%;margin:0 2px;background:var(--point)}.point:hover,.point:focus-visible{outline:2px solid #17243a;outline-offset:1px}.detail{margin-top:9px;min-height:21px}.empty{text-align:center;color:var(--muted);padding:28px 8px}.matrix-axis{font-weight:700}.mode{white-space:nowrap}@media(max-width:820px){.split{grid-template-columns:1fr}}@media(max-width:480px){.wrap{width:calc(100% - 22px)}.card,.panel{padding:12px}.cards{gap:6px}.card strong{font-size:21px}.card small{display:none}.reset{margin-left:0}}
@@ -48,7 +48,7 @@
 </style>
 </head>
 <body>
-<header><div class="wrap hero"><div><div class="brand">OSP BKK</div><h1>Job Done Dashboard</h1><p>วิเคราะห์งานตาม SUBCAUSE2 และ SUBSYSTEM</p></div><label class="upload">＋ อัปโหลด Excel <input id="upload" type="file" accept=".xlsx,.xls,.xlsm" multiple aria-label="อัปโหลด Excel"></label></div></header>
+<header><div class="wrap hero"><div><div class="brand">OSP BKK</div><h1>OSP Subcauses for Improvement</h1><p>วิเคราะห์งานตาม SUBCAUSE2 และ SUBSYSTEM</p></div><label class="upload">＋ อัปโหลด Excel <input id="upload" type="file" accept=".xlsx,.xls,.xlsm" multiple aria-label="อัปโหลด Excel"></label></div></header>
 <main class="wrap">
 <div class="toolbar"><label>ปี <select id="year"><option value="">ทุกปี</option></select></label><label>เดือน <select id="month"><option value="">ทุกเดือน</option></select></label><label>ZONE_BY_SITE <select id="zone"><option value="">ทุกโซน</option></select></label><label>Temp / Per. <select id="temp-per"><option value="">ทั้งหมด</option></select></label><label class="site-filter">SITE_CODE <input class="site-search" id="site" type="search" placeholder="เช่น SITE1, SITE2" autocomplete="off" spellcheck="false"></label><span id="filters"></span><button class="reset" id="reset">ล้างตัวกรอง</button></div>
 <p id="status" class="status" role="status"></p>
@@ -60,8 +60,8 @@
 </div>
 <section class="panel line-panel">
 <h2>จำนวนงานตาม Main Group · 2025 เทียบกับ 2026</h2>
-<p class="hint">แกน X คือ Main Group หรือ SUBCAUSE2 ของกลุ่มที่เลือก · แกน Y คือจำนวนงาน · ชี้เมาส์หรือคลิกชื่อเพื่อดูยอดทั้งสองปี</p>
-<div class="key"><span data-comparison-year="2025"><i class="swatch" style="background:#1d5ad5"></i>2025</span><span data-comparison-year="2026"><i class="swatch" style="background:#087d69"></i>2026</span><span>แสดงทั้งสองปีตามตัวกรองเดือน โซน รหัสไซต์ และกราฟด้านบน</span></div>
+<p class="hint">แกน X คือ Main Group หรือ SUBCAUSE2 ของกลุ่มที่เลือก · แกน Y คือจำนวนงาน · ชี้เมาส์หรือคลิกชื่อเพื่อดูยอด</p>
+<div class="key"><span data-comparison-year="2025"><i class="swatch" style="background:#1d5ad5"></i>2025</span><span data-comparison-year="2026"><i class="swatch" style="background:#087d69"></i>2026</span><span>แสดงข้อมูลตามตัวกรองปี เดือน โซน รหัสไซต์ และกราฟด้านบน</span></div>
 <div id="year-bars" class="matrix-wrap" tabindex="0" aria-label="กราฟแท่งเปรียบเทียบจำนวนงานตาม Main Group"></div>
 <p id="line-detail" class="detail muted" aria-live="polite"></p>
 </section>
@@ -74,7 +74,7 @@
   </div>
 </div>
 <p class="hint">แกน X คือเดือนที่สร้างงาน · แกน Y คือจำนวนงาน · ชี้เมาส์หรือคลิกชื่อเดือนเพื่อดูยอด</p>
-<div class="key"><span data-comparison-year="2025"><i class="swatch" style="background:#1d5ad5"></i>2025</span><span data-comparison-year="2026"><i class="swatch" style="background:#087d69"></i>2026</span><span>กราฟนี้แสดงทั้งสองปีตามตัวกรองเดือน โซน รหัสไซต์ และกราฟด้านบน</span></div>
+<div class="key"><span data-comparison-year="2025"><i class="swatch" style="background:#1d5ad5"></i>2025</span><span data-comparison-year="2026"><i class="swatch" style="background:#087d69"></i>2026</span><span>แสดงทั้งสองปี โดยปีที่ไม่ได้เลือกจะแสดงสีจางลง</span></div>
 <div id="monthly-lines" class="matrix-wrap" tabindex="0" aria-label="กราฟเส้นเปรียบเทียบจำนวนงานรายเดือน"></div><p id="detail" class="detail muted" aria-live="polite"></p>
 </section>
 <section class="panel" aria-labelledby="wfm-title">
@@ -929,8 +929,11 @@ function drawMonthlyLines(data,month,selectedYears) {
 function drawComparisonChart(parentId,detailId,names,series,bars,selectedYears) {
   const parent = byId(parentId), detail = byId(detailId);
   const yearOpacity = year=>matches(selectedYears,String(year)) ? 1 : 0.35;
+  const visibleSeries = [...series.entries()].filter(([index])=>!bars || yearOpacity(2025+index)===1);
   for (const legend of parent.previousElementSibling.querySelectorAll('[data-comparison-year]')) {
-    legend.style.opacity = yearOpacity(legend.dataset.comparisonYear);
+    const opacity = yearOpacity(legend.dataset.comparisonYear);
+    legend.hidden = bars && opacity<1;
+    legend.style.opacity = bars ? 1 : opacity;
   }
   parent.replaceChildren();
   detail.textContent = '';
@@ -940,7 +943,7 @@ function drawComparisonChart(parentId,detailId,names,series,bars,selectedYears) 
   const width = Math.max(480,parent.clientWidth,left+right+names.length*(bars ? 112 : 72));
   const slot = (width-left-right)/names.length;
   const x = i=>left+(i+.5)*slot;
-  const peak = Math.max(1,...series.flat());
+  const peak = Math.max(1,...visibleSeries.flatMap(([,values])=>values));
   const unit = 10**Math.floor(Math.log10(Math.max(1,peak/4)));
   const step = [1,2,5,10].find(n=>n*unit>=peak/4)*unit;
   const limit = Math.ceil(peak/step)*step;
@@ -970,8 +973,9 @@ function drawComparisonChart(parentId,detailId,names,series,bars,selectedYears) 
     ctx.fillText(fmt(tick),left-9,y(tick));
   }
   const barWidth = Math.min(30,slot*0.32);
-  const barCenter = (i,index)=>x(i)+(index ? 24 : -24);
-  for (const [index,values] of series.entries()) {
+  const barGap = 6;
+  const barCenter = (i,index)=>x(i)+(visibleSeries.length===1 ? 0 : (index ? 1 : -1)*(barWidth+barGap)/2);
+  for (const [index,values] of visibleSeries) {
     ctx.globalAlpha = yearOpacity(2025+index);
     ctx.fillStyle = ctx.strokeStyle = colors[index];
     if (bars) {
@@ -1005,12 +1009,12 @@ function drawComparisonChart(parentId,detailId,names,series,bars,selectedYears) 
   ctx.lineWidth = 3;
   ctx.lineJoin = 'round';
   ctx.strokeStyle = '#fff';
-  for (const [index,values] of series.entries()) {
+  for (const [index,values] of visibleSeries) {
     ctx.globalAlpha = yearOpacity(2025+index);
     ctx.fillStyle = colors[index];
     values.forEach((value,i)=>{
       if (value===null) return;
-      const other = series[1-index][i];
+      const other = visibleSeries.length===2 ? series[1-index][i] : null;
       const below = !bars && other!==null && (value<other || (value===other && index===1));
       const labelX = bars ? barCenter(i,index) : x(i);
       const labelY = y(value)+(below ? 13 : -12);
@@ -1024,7 +1028,7 @@ function drawComparisonChart(parentId,detailId,names,series,bars,selectedYears) 
   labels.style.gridTemplateColumns = 'repeat('+names.length+',minmax(0,1fr))';
   const summaries = names.map((name,index)=>[
     name,
-    ...series.map((values,i)=>(2025+i)+' '+(values[index]===null ? 'ไม่มีข้อมูลเดือนนี้' : fmt(values[index])+' งาน'))
+    ...visibleSeries.map(([i,values])=>(2025+i)+' '+(values[index]===null ? 'ไม่มีข้อมูลเดือนนี้' : fmt(values[index])+' งาน'))
   ]);
   for (const summary of summaries) {
     const label = el('button','line-label',summary[0]);
@@ -1089,7 +1093,7 @@ function render() {
   drawPie(base.filter(row=>causeMatch(row) && wfmMatch(row)),selected.length);
   drawWfmCharts(base.filter(row=>causeMatch(row) && systemMatch(row)),solutionMatch,assignToMatch);
   const comparison = monthRows.filter(row=>(row[0]===2025 || row[0]===2026) && causeMatch(row) && systemMatch(row) && wfmMatch(row));
-  drawYearBars(comparison,year);
+  drawYearBars(comparison.filter(row=>matches(year,String(row[0]))),year);
   drawMonthlyLines(filterByCause(comparison,multiValues('monthly-cause')),month,year);
   drawRepairMap(filterByCause(selected,multiValues('repair-cause')));
 }
