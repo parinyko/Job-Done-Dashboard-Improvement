@@ -61,7 +61,7 @@
 <section class="panel line-panel">
 <h2>จำนวนงานตาม Main Group · 2025 เทียบกับ 2026</h2>
 <p class="hint">แกน X คือ Main Group หรือ SUBCAUSE2 ของกลุ่มที่เลือก · แกน Y คือจำนวนงาน · ชี้เมาส์หรือคลิกชื่อเพื่อดูยอดทั้งสองปี</p>
-<div class="key"><span><i class="swatch" style="background:#1d5ad5"></i>2025</span><span><i class="swatch" style="background:#087d69"></i>2026</span><span>แสดงทั้งสองปีตามตัวกรองเดือน โซน รหัสไซต์ และกราฟด้านบน</span></div>
+<div class="key"><span data-comparison-year="2025"><i class="swatch" style="background:#1d5ad5"></i>2025</span><span data-comparison-year="2026"><i class="swatch" style="background:#087d69"></i>2026</span><span>แสดงทั้งสองปีตามตัวกรองเดือน โซน รหัสไซต์ และกราฟด้านบน</span></div>
 <div id="year-bars" class="matrix-wrap" tabindex="0" aria-label="กราฟแท่งเปรียบเทียบจำนวนงานตาม Main Group"></div>
 <p id="line-detail" class="detail muted" aria-live="polite"></p>
 </section>
@@ -74,7 +74,7 @@
   </div>
 </div>
 <p class="hint">แกน X คือเดือนที่สร้างงาน · แกน Y คือจำนวนงาน · ชี้เมาส์หรือคลิกชื่อเดือนเพื่อดูยอด</p>
-<div class="key"><span><i class="swatch" style="background:#1d5ad5"></i>2025</span><span><i class="swatch" style="background:#087d69"></i>2026</span><span>กราฟนี้แสดงทั้งสองปีตามตัวกรองเดือน โซน รหัสไซต์ และกราฟด้านบน</span></div>
+<div class="key"><span data-comparison-year="2025"><i class="swatch" style="background:#1d5ad5"></i>2025</span><span data-comparison-year="2026"><i class="swatch" style="background:#087d69"></i>2026</span><span>กราฟนี้แสดงทั้งสองปีตามตัวกรองเดือน โซน รหัสไซต์ และกราฟด้านบน</span></div>
 <div id="monthly-lines" class="matrix-wrap" tabindex="0" aria-label="กราฟเส้นเปรียบเทียบจำนวนงานรายเดือน"></div><p id="detail" class="detail muted" aria-live="polite"></p>
 </section>
 <section class="panel" aria-labelledby="wfm-title">
@@ -899,7 +899,7 @@ byId('pie').onpointermove = event=>{
   if (event.currentTarget.title!==title) event.currentTarget.title = title;
 };
 byId('pie').onpointerleave = event=>event.currentTarget.removeAttribute('title');
-function drawYearBars(data) {
+function drawYearBars(data,selectedYears) {
   const column = state.mainGroup.size ? 2 : 13;
   const names = group(data,column).map(([name])=>name);
   const series = [2025,2026].map(year=>{
@@ -907,10 +907,10 @@ function drawYearBars(data) {
     return names.map(name=>counts.get(name) || 0);
   });
   const labels = state.mainGroup.size ? names : names.map(groupLabel);
-  drawComparisonChart('year-bars','line-detail',labels,series,true);
+  drawComparisonChart('year-bars','line-detail',labels,series,true,selectedYears);
 }
 
-function drawMonthlyLines(data,month) {
+function drawMonthlyLines(data,month,selectedYears) {
   const chosen = byId('scope').value==='15' ? new Set(group(data,2).slice(0,15).map(([name])=>name)) : null;
   const shownMonths = months.map((_,i)=>i+1).filter(value=>matches(month,String(value)));
   const series = [2025,2026].map(year=>{
@@ -923,11 +923,15 @@ function drawMonthlyLines(data,month) {
     }
     return shownMonths.map(value=>coverage.has(value) ? counts.get(value) || 0 : null);
   });
-  drawComparisonChart('monthly-lines','detail',data.length ? shownMonths.map(value=>months[value-1]) : [],series,false);
+  drawComparisonChart('monthly-lines','detail',data.length ? shownMonths.map(value=>months[value-1]) : [],series,false,selectedYears);
 }
 
-function drawComparisonChart(parentId,detailId,names,series,bars) {
+function drawComparisonChart(parentId,detailId,names,series,bars,selectedYears) {
   const parent = byId(parentId), detail = byId(detailId);
+  const yearOpacity = year=>matches(selectedYears,String(year)) ? 1 : 0.35;
+  for (const legend of parent.previousElementSibling.querySelectorAll('[data-comparison-year]')) {
+    legend.style.opacity = yearOpacity(legend.dataset.comparisonYear);
+  }
   parent.replaceChildren();
   detail.textContent = '';
   if (!names.length) return empty(parent,'ไม่มีข้อมูลปี 2025–2026 สำหรับตัวกรองที่เลือก');
@@ -968,6 +972,7 @@ function drawComparisonChart(parentId,detailId,names,series,bars) {
   const barWidth = Math.min(30,slot*0.32);
   const barCenter = (i,index)=>x(i)+(index ? 24 : -24);
   for (const [index,values] of series.entries()) {
+    ctx.globalAlpha = yearOpacity(2025+index);
     ctx.fillStyle = ctx.strokeStyle = colors[index];
     if (bars) {
       values.forEach((value,i)=>ctx.fillRect(barCenter(i,index)-barWidth/2,y(value),barWidth,bottom-y(value)));
@@ -1001,6 +1006,7 @@ function drawComparisonChart(parentId,detailId,names,series,bars) {
   ctx.lineJoin = 'round';
   ctx.strokeStyle = '#fff';
   for (const [index,values] of series.entries()) {
+    ctx.globalAlpha = yearOpacity(2025+index);
     ctx.fillStyle = colors[index];
     values.forEach((value,i)=>{
       if (value===null) return;
@@ -1012,6 +1018,7 @@ function drawComparisonChart(parentId,detailId,names,series,bars) {
       ctx.fillText(fmt(value),labelX,labelY);
     });
   }
+  ctx.globalAlpha = 1;
   const labels = el('div','line-labels');
   labels.style.margin = '0 '+right+'px 0 '+left+'px';
   labels.style.gridTemplateColumns = 'repeat('+names.length+',minmax(0,1fr))';
@@ -1082,8 +1089,8 @@ function render() {
   drawPie(base.filter(row=>causeMatch(row) && wfmMatch(row)),selected.length);
   drawWfmCharts(base.filter(row=>causeMatch(row) && systemMatch(row)),solutionMatch,assignToMatch);
   const comparison = monthRows.filter(row=>(row[0]===2025 || row[0]===2026) && causeMatch(row) && systemMatch(row) && wfmMatch(row));
-  drawYearBars(comparison);
-  drawMonthlyLines(filterByCause(comparison,multiValues('monthly-cause')),month);
+  drawYearBars(comparison,year);
+  drawMonthlyLines(filterByCause(comparison,multiValues('monthly-cause')),month,year);
   drawRepairMap(filterByCause(selected,multiValues('repair-cause')));
 }
 for (const id of ['year','month','zone','temp-per','scope','monthly-cause','repair-cause']) byId(id).onchange = render;
